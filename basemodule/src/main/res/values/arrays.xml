@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="spb_colors">
+        <item>#DF5144</item>
+        <item>#4C8DF5</item>
+        <item>#FFCF41</item>
+        <item>#19A462</item>
+    </array>
+</resources>

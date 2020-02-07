@@ -1,5 +1,6 @@
 package com.kingsofts.basemodule.screen.splash
 
+import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 
 /**
@@ -30,4 +31,9 @@ class ConfigurationData {
     val showNativeAds: Boolean = false
     @SerializedName("show_ads_video")
     val showVideoAds: Boolean = false
+
+
+    override fun toString(): String {
+        return Gson().toJson(this)
+    }
 }

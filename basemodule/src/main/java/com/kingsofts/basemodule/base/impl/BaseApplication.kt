@@ -1,6 +1,8 @@
 package com.kingsofts.basemodule.base.impl
 
 import android.app.Application
+import com.google.android.gms.ads.MobileAds
+import com.kingsofts.basemodule.BuildConfig
 import com.kingsofts.basemodule.network.NetworkService
 import com.kingsofts.basemodule.network.configservice.ConfigService
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiskCache
@@ -11,16 +13,39 @@ import com.nostra13.universalimageloader.core.ImageLoader
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType
 import com.nostra13.universalimageloader.utils.StorageUtils
+import com.onesignal.OneSignal
 
 abstract class BaseApplication : Application() {
+    companion object {
+        lateinit var Instance: BaseApplication
+    }
+
     override fun onCreate() {
         super.onCreate()
+        Instance = this
         initConfigService()
         initImageLoader()
+        initOneSignal()
+        initAds()
+    }
+
+    private fun initAds() {
+        MobileAds.initialize(this)
+    }
+
+    private fun initOneSignal() {
+        OneSignal.startInit(this)
+            .inFocusDisplaying(OneSignal.OSInFocusDisplayOption.Notification)
+            .unsubscribeWhenNotificationsAreDisabled(true)
+            .init();
     }
 
     private fun initConfigService() {
-        NetworkService.initRootService(ConfigService::class.java,"https://configs.kingsofts.info/")
+        if (!BuildConfig.APP_CONFIG_URL.isNullOrBlank())
+            NetworkService.initRootService(
+                ConfigService::class.java,
+                BuildConfig.APP_CONFIG_URL
+            )
     }
 
     private fun initImageLoader() {
